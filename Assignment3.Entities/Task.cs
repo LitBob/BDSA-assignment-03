@@ -12,18 +12,18 @@ public class Task
     public User? AssignedTo { get; set; }
 
     public string? Description { get; set; }
-    public State State { get; set; }
+    public Assignment3.Core.State State { get; set; }
+    public DateTime Created { get; set; }
+    public DateTime Updated { get; set; }
 
     [Required]
     public virtual ICollection<Tag> Tags { get; set; }
 
-}
+    public Task (string title) 
+    {
+        Title = title;
+        State = Assignment3.Core.State.New; //This should probably be set but I suppose it can just be updated later
+        Tags = new List<Tag>();
+    }
 
-
-public enum State {
-    New, 
-    Active, 
-    Resolved, 
-    Closed, 
-    Removed 
 }

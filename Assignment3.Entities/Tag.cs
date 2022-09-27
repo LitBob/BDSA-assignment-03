@@ -11,4 +11,10 @@ public class Tag
 
     public virtual ICollection<Task> Tasks { get; set; }
 
+    public Tag (string name)
+    {
+      Name = name;
+      Tasks = new List<Task>();
+    }
+
   }

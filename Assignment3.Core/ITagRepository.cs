@@ -7,4 +7,5 @@ public interface ITagRepository
     TagDTO Read(int tagId);
     Response Update(TagUpdateDTO tag);
     Response Delete(int tagId, bool force = false);
+    
 }

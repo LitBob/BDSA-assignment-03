@@ -15,4 +15,11 @@ public class User
     public string Email { get; set; }
 
     public virtual ICollection<Task> Tasks { get; set; }
+
+    public User (string name, string email)
+    {
+        Name = name;
+        Email = email;
+        Tasks = new List<Task>();
+    }
 }

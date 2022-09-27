@@ -18,7 +18,7 @@ public partial class KanbanContext : DbContext
             .Property(e => e.State)
             .HasConversion(
                 v => v.ToString(),
-                v => (State)Enum.Parse(typeof(State), v));
+                v => (Core.State)Enum.Parse(typeof(Core.State), v));
     }
 
 
