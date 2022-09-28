@@ -23,6 +23,7 @@ public class Task
     {
         Title = title;
         State = Assignment3.Core.State.New; //This should probably be set but I suppose it can just be updated later
+        Updated = DateTime.Now;
         Tags = new List<Tag>();
     }
 

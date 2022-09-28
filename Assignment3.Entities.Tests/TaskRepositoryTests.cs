@@ -62,7 +62,8 @@ public class TaskRepositoryTests
         var tagList = new List<string>();
 
         //Assert
-        response.Should().BeEquivalentTo(new TaskDetailsDTO(2, "taskTitle2",null, new DateTime(), null, tagList, State.New, new DateTime()));
+        response.Should().BeEquivalentTo(new TaskDetailsDTO(2, "taskTitle2",null, new DateTime(), null, tagList, State.New, new DateTime()), options => options.Excluding(x => x.StateUpdated));
+        // In the above we choose to ignore the StateUpdated field, as it is not relavant to this test, and impossible to pinpoint its exact value
 
     }
 
@@ -96,4 +97,36 @@ public class TaskRepositoryTests
         response.Should().BeEquivalentTo(output);
     }
 
+    [Fact]
+    public void Updating_tags_is_allowed_and_returns_new_tags_correctly() {
+        //Arrange
+        //Happens in database creation
+        var tagList = new[]{"2"};
+
+        //Act
+        _repository.Update(new TaskUpdateDTO(2, "nytNavnIgen", null, null, tagList, State.Active));
+
+        var response = _repository.Read(2);
+
+        //Assert
+        response.Should().BeEquivalentTo(new TaskDetailsDTO(2, "nytNavnIgen", null, new DateTime(), null, new[]{"tag2"}, State.Active, new DateTime()), options => options.Excluding(x => x.StateUpdated));
+        // In the above we choose to ignore the StateUpdated field, as it is not relavant to this test, and impossible to pinpoint its exact value
+    }
+
+    [Fact]
+    public void Updating_state_changes_StateUpdated_correctly() {
+        //Arrange
+        //Happens in database creation
+        var tagList = new[]{"2"};
+        var expected = DateTime.UtcNow;
+
+        //Act
+        _repository.Update(new TaskUpdateDTO(2, "nytNavnIgen", null, null, tagList, State.Active));
+        var response = _repository.Read(2);
+
+        var stateUpdated = response.StateUpdated;
+
+        //Assert
+        Assert.Equal(expected, stateUpdated, precision: TimeSpan.FromSeconds(1)); // If new updated time was within 1 second.
+    }
 }
