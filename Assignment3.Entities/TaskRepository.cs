@@ -121,6 +121,15 @@ public class TaskRepository : Assignment3.Core.ITaskRepository
     public Response Update(TaskUpdateDTO task)
     {
         var entity = _context.Tasks.Find(task.Id);
+
+        // Get all tags from task
+        var allTags = new List<Tag> {};
+        foreach(string s in task.Tags) {
+            int sInt = int.Parse(s);
+            var tag = _context.Tags.Find(sInt);
+            if (tag != null) allTags.Add(tag);
+        }
+
         Response response;
 
         if (entity is null) 
@@ -134,6 +143,11 @@ public class TaskRepository : Assignment3.Core.ITaskRepository
         else 
         {
             entity.Title = task.Title;
+            entity.Tags = allTags;
+            if (task.State != entity.State) {   //Only update "updated" if state is changed
+                entity.Updated = DateTime.UtcNow;
+            }
+            entity.State = task.State;
             _context.SaveChanges();
             response = Response.Updated;
         }
