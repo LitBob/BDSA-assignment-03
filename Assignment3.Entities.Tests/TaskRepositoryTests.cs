@@ -126,7 +126,9 @@ public class TaskRepositoryTests
 
         var stateUpdated = response.StateUpdated;
 
+        bool updateIsAfterExpected = expected < stateUpdated;
         //Assert
         Assert.Equal(expected, stateUpdated, precision: TimeSpan.FromSeconds(1)); // If new updated time was within 1 second.
+        Assert.Equal(true, updateIsAfterExpected); // Since expected is made before the update happens, we expect its value to be less (meaning the actual was actually updated).
     }
 }
