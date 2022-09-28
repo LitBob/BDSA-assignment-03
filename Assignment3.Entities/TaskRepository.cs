@@ -144,8 +144,10 @@ public class TaskRepository : Assignment3.Core.ITaskRepository
         {
             entity.Title = task.Title;
             entity.Tags = allTags;
+            if (task.State != entity.State) {   //Only update "updated" if state is changed
+                entity.Updated = DateTime.UtcNow;
+            }
             entity.State = task.State;
-            entity.Updated = DateTime.UtcNow;
             _context.SaveChanges();
             response = Response.Updated;
         }
